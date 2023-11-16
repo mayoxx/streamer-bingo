@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cru3l Bingo Card</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100hh;
+        margin: 0;
+        background-image: url("https://cdn.wallpapersafari.com/38/60/EA0wpD.jpg");
+        /* 
+                background-image: url("https://i.pinimg.com/originals/6c/1c/e4/6c1ce49ec0d9039aa0de644beab8d9b0.jpg");
+                background-image: url("https://thumbs.dreamstime.com/b/christmas-pattern-27094971.jpg");
+                background-image: url("https://www.zastavki.com/pictures/originals/2013/Christmas_wallpapers_Fabric_with_a_pattern_of_Christmas_toys_on_Christmas_052662_.jpg");
+                background-image: url("https://cdn.wallpapersafari.com/38/60/EA0wpD.jpg");
+                background-image: url("https://image.freepik.com/free-photo/gold-christmas-background_1048-6944.jpg");
+                */
+      }
+      h1 {
+        background-color: #487283;
+        color: white;
+        margin-left: 20px;
+        margin-right: 20px;
+        padding: 10px;
+        text-align: center;
+        font-size: 3rem;
+        border-radius: 25px;
+        text-shadow: rgb(144, 179, 193) 1px 0 10px;
+      }
+      @media screen and (max-width: 500px) {
+        h1 {
+          font-size: 2rem;
+        }
+        li .cellinside {
+          font-size: 1rem;
+        }
+      }
+      @media screen and (max-width: 330px) {
+        h1 {
+          font-size: 1rem;
+        }
+        li .cellinside {
+          font-size: 0.6rem;
+        }
+      }
+      ul {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        list-style-type: none;
+        margin: 0;
+        padding: 20px;
+        padding-top: 0;
+        width: calc(100vw-40px);
+        max-width: 800px;
+        height: 100vw;
+        max-height: 760px;
+
+        margin: auto;
+      }
+      li {
+        background-color: #d5e9ec;
+        border: 1px solid gray;
+        vertical-align: middle;
+        word-wrap: break-word;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 8px;
+        font-size: 2rem;
+        font-weight: 700;
+        background-size: auto auto;
+      }
+      li:hover {
+        cursor: pointer;
+      }
+      .unselectable {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      #overlay {
+        position: fixed;
+        display: none;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 2;
+        cursor: pointer;
+      }
+      .toast {
+        font-size: 4rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        height: 100vh;
+        color: rgb(0, 81, 255);
+        text-shadow: rgb(0, 81, 255) 1px 0 10px;
+      }
+      .highlight {
+        /* background-color: blue; */
+        background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3C!-- Created with Inkscape (http://www.inkscape.org/) --%3E%3Csvg version='1.1' id='svg1' width='180' height='180' viewBox='0 0 180 180' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns='http://www.w3.org/2000/svg' xmlns:svg='http://www.w3.org/2000/svg'%3E%3Cdefs id='defs1' /%3E%3Cg id='g1'%3E%3Cimage width='180' height='180' preserveAspectRatio='none' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAd&%2310;IUlEQVR4nO2dfWwUx93HZ2d378179p19d747v9zZPr+/HTYgXlwggGwMhAB5qylKowhM6jpA0hZS&%2310;ByWhiNKIoqShBKEEtZFKEop4SJryUiVBvDRN0ihEUfqEJIgmESWUUERoYkWW6+zzR+941uOZ3bm3&%2310;fb2vNNq9nc/Ny+5vfjuzL7MMAACCvPIykSD4f6OWrgPCOsqgaeHWcQxNOtli5MpD4o3G4Fg0zvQM&%2310;l1h+K4G/lQDfon/A8NJM0HRIjHSpBoMro7SORmcAEi8nKzPZ/WOaaWXKyLV0szMoa3qGkWwktXql&%2310;7TgvjnpPnIeRFgr9nU1GysntJCMzcpzlGPQPum+FeSbPkBjpaQsiAC4OItsBwuD+i2NIjUhNRm6b&%2310;URm5Y2IlZkKkkjJl1GzFVpEeG5jqDM76M+3fQQpGzX4m6qnlWreRGVS4M6bpGQa3UQORBp65YPIy&%2310;uXBeWo11CMbnnUsGXSdtyzMGZ5Qu26V62pe7xIcyuBs4uWJw5VHrjJA/+6gsmpaBxtPsWL0wSn1N&%2310;MzMoa3omf2PFHIwcZ2VGdem+xecZYzHoYAr9LcfiEk1lnbTMBSP3HzMwONaqjKZSozWTGqjZGBxr&%2310;OQa1eDnvhpNcZqmko6ZoymdERuk/lmDyN1byMqXUNgJdnJ5k4vKMQRmO8Ec1pKZRo6wcZ0RGr+XS&%2310;iqGLkMTTGI1u+lUyTLb6r3phSPveMkz+xoo5GDnOyozq0tpD5xmTMdLuA8T8lmNxiaayTlrmgpH7&%2310;jxkYHGtVRlOp0ZpJDdRsDI61HINavJx3w0kus1TSUVM05TMio/QfSzD5Gyt5mVJqG4EuTk8ycXnG&%2310;oAzuxgr6BgjOSDL1ltI4SGCzxUglt5OMzOC2W5nJKy9zSC996FwLd6OH5O2NzOBkZSYvs+rPf/4z&%2310;XL16tcvr9RaXlpYGYrFYMBgM+gYHBx1ff/21qQwC7Z9AzLr0N257Ous06WSDQTnSNqMz4/bJwYMH&%2310;HY2NjTOKi4uHBEE4ZLPZzjocjqsQwjEAgAgAECGEY06n80IwGLyXlA4h6JnRVDSFyJShqbAZGPjl&%2310;l1/Cnp6ehlAotN3lcl1gWVZkGEYECQPGBQihWFxcvFshT5xh6ZZR8oByksuMJh0tDBpXPsMzy5Yt&%2310;q/T7/XtZlv0GyBhwMjAMI7IsK/p8vsPf+973ivVar3QYkhtXM9CUI1uMqcLOnTttsVhs0G63X+M4&%2310;TtGQk8Fms12PRqM/PnHihE3rOmQ53DACNQUJS7UZUpwhmDvuuCNaUlLyJ1pDhhCKLMuOlpaWPt/T&%2310;0xMbGRmBmDw0r1eGDNbCceskRq6l0MYplSMTJhvl1RVz9epVGI/H5zidzosQQsV+MsMwIoRwJBAI&%2310;HJg9e3bH5cuXSXnJlcsoTF5G0qlTp2Btbe3dPM8PAzqPPFZSUvJSV1dXx1tvvWWJA67kKcwQAGFp&%2310;KObKlStcTU3NFoZhRgHFoK+goOBce3v74g8++EBrr6kmk5cR9Oijj9rKysp2sCxLcwVjLBAI7F29&%2310;enWxdiXWThBZR60ejcNtT2edJp1sMEoeUPfMvn37uEAg8Cug4JEZhhF5nh9uampa9eqrr3IyeeDy&%2310;NwujqWgKkSlDU2HdMj/5yU9sPp9vp5JnTnQxLk6bNm2OKIo4QyDlaTpGyQPKSS4zmnS0MGhc+XTJ&%2310;HDp0iPP7/bKeGQAgsiwrOp3O8/F4vEHrMuuBIblxNQNNObLFGCIcOHCAC4VCj0MIFa9kCIJwds6c&%2310;OdVal1kn4YYRqClIWKrNkOI0ZT7++GMuFottlTPmxLVl0el0nps7d241Lh291UslBmvhuHUSI9dS&%2310;aOOUypEJk43yqsb87W9/g42NjeulT8XhAsMwotPpvNDR0RGj3NdWYfLSi0RRhB0dHXewLDsCFPrN&%2310;HMddmzZt2iztSqtfKXkTMwRAWOqKmTZt2jSO464BZWMebW1tvU0hDz15TTWZvPSgW2+9tc7lcl0C&%2310;FDdNqqqqHvjXv/6VP3gEQWQdtXo0Drc9nfUb6Rw4cMBWXV09o6CgYMDv92/1+/1bHA7HYCQS6V62&%2310;bFlAcvBk06GsD2mbZszAwICvqKjoHaVrzRBCMRQKPf3888+jb+vrxTvqgdFOf/jDH7j6+voVgiCc&%2310;gxCKySfHpAFCOOJ2u98oLS3dMG/evOjHH3+MK7hcZWgqrBnz1FNPOYqLiw8l6w9kDNrj8bz+5JNP&%2310;CoS85PaLpRg576YkGuPCpvPmm29yVVVV23meH1N6/BEkbh5wHDfs9XoPdXR0zP3kk084yrIq7SCS&%2310;J8g5c+nSJVhdXb2N5i6gw+G4uHDhQvSKhi7rpTVDcuM5DY2NjYNSr1xcXPx6KBT6Dc/zw0rP+Cb5&%2310;yZMnzz927Bju1GOIEI/H72JZVrZBQwhFnudHJk2aNF/r8hok3DAC1XTPPfeEnU7nlaRBe73ew7/4&%2310;xS8EAACYOXPmDJfLdYHm5U6e50d9Pt+h+fPnN3z44YfjKiQRJCzl4nLO3HTTTVPtdvt1pXqyLCtW&%2310;VVUNvfzyy0p56KJeOmDUb0XhcHg9SBily+X6aPHixQFp/OzZs1tcLtdnNI9KAgBEm802XFlZuXnt&%2310;2rUCIU+08poyfX195QUFBedp6ubxeF7aunUr6b0/XdVLJ8wEYTdmkykqKnoWACA6HI7LM2fOnIxj&%2310;5s+f3+R2u8/T9K+Tnl4QhPc7Ojrmnjp1iqZ8mmjbtm0ur9f7Ck1jdTgcny1atCisXWmNKdU9dGlp&%2310;abfH49ne3d0dk+Nuv/326qKiordoPTX4r3GPlJWV7RwcHPRI0gKEpVyLzzpz9uxZWFlZuYOmHjzP&%2310;j8Tj8e4U89Kr19TUQ+tK999/f2EoFNoNIRwFiQEhULgiACEUCwoKznd0dCzdv3+/birZ2dl5B8uy&%2310;iq9PQQjFcDi85fz587opu5GE7jTU+qXbcXHoOg0jZeV4CACA77//PozH45PD4fBWQRAuUb6GJHIc&%2310;N+bz+Z5fuHBhNSEvtFXnjJk3b16L0+m8QnPzpKio6PTGjRtdKeSF3W8WZTISTSJZ8zLffvstXLVq&%2310;VSAYDO5XehoNSLy1zWa7HolENvX39xdSlJFU3rSZH/3oR8Vut/s9pUuRDMOIdrv92rx589AH9ZXy&%2310;yksinAdA40kMruXknHnxxRe55ubmAbvdTjXtFQA33ur4qLa29q7jx4/bAN745PZFWszRo0e5UCj0&%2310;LI1nZllWjMVi92SpPLo7bmoxKED6ratw5coV+J3vfGeW0+k8nzQGQGncgiD8bzgcXt/S0jJ5z549&%2310;uJdJsxbq6uruYRhG8WwCIRQDgcCB3/72t+mUR+5YoQfc7My4CK1Ekz+WWb58edTn872eikGDhAFx&%2310;HDfm9/t3nzlzhsOlnam6u7vjDofjutIzGgAA0el0Xvr+97+fySU63P5Bt1mCybk3zXV46KGHhFAo&%2310;9BuWZRUf8MGFmpqaAeROY8aeY926dZ6ioqJ3lPJOTD0w2tLSsiTdvPLMhO3jhN2YIyZr2rZtG1dd&%2310;Xb2Z5rIYGjiOG6mvr7/3+PHjWSnzmTNnYFlZ2V6am0IMw4ihUOhpq0zTpYY097DZCl9//TVsampa&%2310;Ybfbv6IxJmlgWXY0Go0+IJmgBbdvAGE5jonH49/lOG6M8o3tjwYHB4vTzUsmzqqMuSSKIpw+fXpX&%2310;cmZOkFq/eiwYDO5at26dI938b7755mqn03k5eRlOLj+e50daW1vnpF3ZvLBCrRq1ful2XBy6TsNI&%2310;WTk+bWbx4sV1brdbsQ+LBoZhxJKSkkOSeeHQlk/0EM899xzn8/leph2ghsPhHcPDw2h6VHlh9kOe&%2310;yYJoEtHsNNDf3+/z+/1HU70CwjCM6Ha73+vq6mqSJCe78/7973/DhoaGQZqzQvJBqvvuuy9bN3ry&%2310;kgjnAdB4EoNrObpiHn30UVckEvkVAEDxWrA0sCwr2my2y62trQsp8gJLly6tczqd1ynTHpkxY8Ys&%2310;QnqKeVEyuj0muWZwpzzcb8OGv/zlL7CpqelejuOGUx0s8jw/Ul5e/vCTTz7pIKX/wgsv2EpKSg4r&%2310;pZW8FV9ZWflYlusod6zQA252ZlyEVqLJPyMmMVicU1BQ8BlIsfuRfKtmyZIllbi0W1tbV9A8WwLA&%2310;f+9Srl27ltTVyES4uqPbLMFo7kFVCDcqffvtt1d6vd7XUu1Xsywrulyuy/X19Xe/8MILN94g+f3v&%2310;f+9yu91Ub5+wLDsaj8fnIAdBz97OiMwEYTfmiNFEQ0NDrsrKyscghKO0XRDJtAqi1+t9vaOjY/Ga&%2310;NWuEeDw+SHsDxe/370p8eSqvHEpr76lGAOhSFEXY0tJyh8PhuAJS8NQAjHvla5jnearHWF0u12d9&%2310;fX0BtBzIUrbMFIxevaaajLW1aNGiFrfb/bZ0SgWQooErBYZhxNra2rvUrZl1hVo1av3S7bg4dJ2G&%2310;kbJyfLYYUtkgAAAODAwIFRUVuzmOo5r0JtUgCMI7r776Ku4ZbJKnSZUh7RMrMhmJJhGtTwM0lYav&%2310;vfYabG9vv8tut19PdcAoF1iWFRsbG5enWp4UmbwkwnkANJ7E4FqOkRiAbuvq6pqW6qU9uSAIwrkt&%2310;W7Y4cHnRlCcDRo/7WxUGBUi/LRN6e3vrCgsLz6XyMXhSCAQC21Uos9yxAhZjxkVoJZr8s8VQqbu7&%2310;u8Hlcn1G89ScXIhEIrfh0s+BcHVHt1mC0dwjqhAAsqRient7Zzidzq/SeQsmGUpLSxdmqzx5hoqZ&%2310;IOzGHDG6VywWG8rEoH0+35AW5baq5CyfxuNlyqgVAGGpyBQWFv4PwzAKu5GskZGR23fu3IlOtph2&%2310;eRQYvXpNNZm85NTZ2Tkrkz40hHCsurp6IS7tvHIj1KpR65dux8Wh6zSMlJXjs8WQyoa26glMRUXF&%2310;1kwMmmEYURCE/x0aGhKU8qIpD4FB163MZCSaRLQ+DdBUGsucOHHCJgjCJ9m4exgMBnc/88wzpBmb&%2310;Mi1zXhLhPAAaT2JwLcdIDJCL6+joWJzJgFAaEjOK7u3p6Wl655135MqXUZnT2AemY1CA9NtS4fDh&%2310;w1xJSclJkAVjBhKjTswu+n5bW9uSv/71r9mahkzuWAGLMeMitBJN/tliqDR9+vT5HMel9B4ibUg8&%2310;Vz0WDod3bNiwwZalIuPqjm6zBKO5N1QhAGQpy/zjH//gfD7fyWw+pIQLPM+Lfr//0Jo1a6RfG9CT&%2310;tzMiM0HYjTlidKkpU6YsTOXbLk1NTZvr6+sfcDgc11KdX49hGLGoqOjdWbNm1aldT7NKa++pRgCE&%2310;5QRm165dDo/H8zagN8aDyb5wT09PU3Fx8elUB5KJic4vNzc3L/n8889TLjMhzqpMXlI1NzffQ2uQ&%2310;drv9Yk9Pz7g3wbdu3eqqrKzcxPP8cCpdlsQnNEbLysq2PPLII2lPRZbXRKtGrV+6HReHrtMwUlaO&%2310;zxZDKtu4Vr1582ZPQUEB9afkYrHYXbh0AABw6tSpU91u9/upPK2XZD0ezys333xzmKbMCvvEikxG&%2310;oklE69MATaXh2NgYrKqqepjGOzMMI3q93pfuu+8+kjMAAAB4//33e8Lh8NPJL3ilEgoKCj5ra2ub&%2310;f/ToUWKZqWpvQeE8ABpPYnAtx0hMUvDOO++M2u32a4DCg9rt9mtz5syJ4dJBlydOnID19fXL7Xb7&%2310;jU9By+UhzYtl2W8ikcjDzz33nANJl6ZeetzfqjAoQPpt2jAyMgKDweCzNG99sywrRqPRB1LNY8mS&%2310;JVGfz/enVN6CSfSrRY/H80pvb29UJn25Y4UecLMz4yK0Ek3+2WImaObMmV0cx40ACgMrLCx8Y+PG&%2310;jWkN2rZv3+6orq4e4nn+m1SeD2EYRnQ6nRdbW1sXvPvuu6Q64raj2yzBaO4hVQgAWd4I+/bts3m9&%2310;3jdougIsy34zderUaQr7jZhXMsyYMWOWIAgfKeUHJAad6IKMVlRUbBsaGnLR5mVBZoKwG3PEaK7m&%2310;5uZVgMKoWJYVg8Hg4//85z+zUq8VK1b4AoHAvnTmAvF4PKcXLFjQcO3aNUPsY7WltfdUIwDccvXq&%2310;1QHaKQtcLtcnd955p4+QnmJeOObIkSNcfX393Xa7/Vqql/ccDseVpqamFZcvX9baI+qNsaZGR0dh&%2310;RUXF45RXHcYaGxu/m6uy3HTTTW2FhYVvpTpgZFl2LBAI7BkYGPDkqmxGFGrVqPVLt+Pi0HUaRsrK&%2310;8dliJpStt7e3jWVZxU8rJ250HD516hSHSwezLS1m/fr1QigU2pnOjKhut/u9WbNmTb569apcXui6&%2310;WZmMRJOI1qeBCZVOfNznFRrDsdvtX3V1dTXg0qHJKxXm9OnTsK2t7Ta73X5ZqVzJkPwstM1mG47F&%2310;Yuu3bduWrcdRDSucJ0HjSQyu5eieaW5uXqo0437S+5WXl29ODL6U8lQqDzWzaNGiWFFR0elUbsQk&%2310;Q0lJyct9fX1yt82p95NRGRQg/TZF2LJliyAIwkdKhsIwjFhQUPDRtm3bBDXKhYbf/e53jkgksoXn&%2310;+ZFUroJACEWn03mxra1toSiKJGNAg5mYcRFaiSb/jJmxsTFYU1PzII2BsCw7Vl9fr+n0A59++imc&%2310;NGnSQpfLdZHn+ZQ8Nc/zI+FweMfGjRul33PB7R90m+EZzb2mCgEAAGBfX1/U6XTKPq+RDMXFxQfP&%2310;nDmDvvMHkKUqHmjZsmWVxcXFR2nKnQzJ2/iCILzX1dU19csvv1TcP2rXK0fMBGE35ohRTZ9//jkM&%2310;hUJPKz2vkXj46Hp3d7eu3iDZsGGDLRqNPkhzix4NPM9/VVtb++MdO3ZYYsCotfdUI4DZs2dPpTGG&%2310;xHcEH0583EfJK+D2X06ZKVOmdKc6K2qSLS4uPnrLLbdUU+SlV+9Lw5hecO/evZzP5ztKYwAul+vs&%2310;unXrcN8RzNZZKWPm1ltvLff5fH9iWTalqX45jhMdDseVhoaGVQcPHuRI6ZtBOKvPZB1tLZoynZ2d&%2310;iwHFp5E5jhtrbm5eCuSlC8P+5S9/6YhGo5t5nh9J51vmfr//paVLl5YD/HEnlcNIzASYJiEcS8Oo&%2310;pieeeMLldrvfAxQHuqSk5OUnnngiORBEhW7TnPnggw/glClTFjidzgsgRYNOXN67HIvFBtatW2eq&%2310;W+dKBqjU79M109DQ0K90zRlCKPI8PzxjxowmQnpKeWnKLF68OOb1el9PZx6RxPX2i3V1dQNvv/02&%2310;h8lLt8eWtEQB0m/DhU2bNhUWFBR8ptTPhBCKgUBgq9blzSCAHTt2uEKh0E6GYdL6NF1i0PjSbbfd&%2310;FiTlgSz1ymAjpctcMLiCZpW5fv06jMViDwKKg+lyuS6uXLkygKZBkB4ZAAAAx44d45qbm++y2+3X&%2310;Uh0wgoRRu93uc3PmzIkr5UVTHq0YJUPMVQvLaVizZk3Q5XIpPuQDIRSrq6v7CeWXC3pixsXPmzev&%2310;oaio6I10v4xrs9muTJo0aQkhD7my6IGZILVaWE7ziUQiW5X6lIlvcL/985//3HQTu2zatMlVUVGx&%2310;mef5YZBG94Pn+W/q6upWnTx50nCX9zTxoLkMq1atCtpsNsVb3BDCsebm5gUA3+Jx+0bvzISQmPDm&%2310;7eSce6l4bJZlx6LR6NYjR45wNHnphDGXvvjiC1heXv4YoDhgHo/n8KFDh0iX6VAZkQEA/NdbV1ZW&%2310;Pmi326+lOpEky7JiaWnpjv7+fkN5apzVZ7KOthbVmL6+vnK73X4VKB+osXg8PhmMl94MMlNm3DGd&%2310;P39+zOfzHeA4biwVw4YQin6/f8+ePXtctHnpgJkA0ySEY2mYnKmsrOwxpRF+YiqvV86dO3ejjMPD&%2310;w3DNmjWu6dOn13m93sWRSKQ/Go32V1dXJ2+Do/WQq7sWDJWOHDkC29vbZ7nd7tPJfURzWRNCKIZC&%2310;oYOPPPKIkE6+akrJAJX6dLphfvCDHwSUvDNIHMBgMLjqP//5D1y+fHm0oqLix4WFhUedTuflZGNg&%2310;WVb0+Xynly5d6sHlhVnqjZHdl88884ytqanpDkEQPqH11ompHA797Gc/EzDpan78k0sUIP3WfSgv&%2310;Lx9KYebQX5WUlOxnWXbcS6lJYw4Gg08/9NBDmrytkkaQO1ZAjvnpT39aWF5e/jjHcYpvxiQ9dWlp&%2310;6UtbtmzB7RvZvFRisJHSZS4YXEEzYn74wx96XC7XBRqDThotLo7juNFYLLbpqaeeIg2C0LLogVGS&%2310;LHP27FnY2dk5t6CgQPETdsn59sLh8IFf//rXuD51xuXJlFEyxFy1sKyGmpqaAUA5yEFD8mEdm812&%2310;raWl5bbh4eFMvaLaTKbHAgAA4MqVK4MlJSUHOI5TfDk3cfVj94svvsilk1cOmQlSq4VlLZ8jR47Y&%2310;aJ+owwUIoSgIwvnOzs6OhDFbVs8++6wtEok8zPO87JzWyekTIpHIlmPHjulqn6niQXMZ2tvbF6Tz&%2310;pBnLsiLHcaLX631twYIFyVf/AbKU8wp6Y7Li7T799FPY1tZ2L82z1jzPjzY2Nq7IZXlSZIytv//9&%2310;79Dv9x9I50M9LMuOlZeX737ggQdobn2rdebKJpO2RFGEU6ZMWWWz2WRfW0tMcnN17ty55bksT6rC&%2310;WX0m62hryRlzyy23hHmeH051vmW73f5NTU3NwP79+zlC+iQZicEdU2rmiy++gJMnT77bZrN9Q3IY&%2310;ibPcWF1d3TRSOtkqT4rMBJgmIRxLw2RNFRUVa1OdiMXhcFxsb2+fm3gRFldGuXrplcmJzp49C1tb&%2310;W+c7HI4L6OXNhGP4qqqqau2HH36om9O9kgEq9ek0Yy5dugQ9Hs/rIIWuhiAIbyS+j0I6I+CWRmSy&%2310;ur97e3uDgUBguyAIn7AsO+p2u8/7fL4ds2fPrkvM0KQbG0EB0m/dhWXLlkVp56lgWVYMBALP9/f3&%2310;F2pd7hwEuWMFLMZgI6XLXDC4gqbMVFVV3U0zGIQQjlRVVW3YtWuX0kQraD5GYZRkKUbJEHPVwjIO&%2310;Xq93L8mgk9dJnU7npXg8vgBMLJtcMBqT6bEwEzNB2I05YDJK480334R2u/0t3IAweefP6/W+1dPT&%2310;o6spvfLKvXLmQXMZ1q9fD+12+zmAv74sBoPBvYODgx6Ab824epuB0avXVJMxplavXg3tdvt5gBg0&%2310;x3Ff1dbWDm7cuBGttJzMylhWOKvPZB1tLVlnTp48Cd1u92vSPrTL5To3derUGRTlJMlsDE2jNisz&%2310;AaZJCMfSMFlRPB7vcjqdH3Ecd8Hv9+9euXKlT6Y8pN9mYfJKSMkASX0WdKkJc/z4cfjHP/6R9Fay&%2310;UjrAxIyuj1uuGEby41vJOu53XvqV3LFKxlmG0cKrJNelIZcMwMTjZFRGSZZhaOZawBkmKVEjMiQZ&%2310;jZHzZFZllCOzyKhpDHlZRNI+tJmF9rdwfTMzMDhZmTGl9NQtUJuxrKSDD7nBF+260iBObQZdJ8ls&%2310;jNL4x8zMBJgmIRxLw6gpNH+5MhuZyQuQPTOJoUknlbxwy2wzAIkj/TY6o8a+1D2Tv7FiDullEKYL&%2310;RqlF5IJJrktDLhmAicfJqIySLMPkb6yQZTRGzpNZlVGOzCKjpjHkZRHlb6yYi8HJyowppadugdqM&%2310;ZSUdfMgNvmjXlQZxajPoOklmY5TGP2ZmJsA0CeFYGkZNofnLldnITF6A7JlJDE06qeSFW2abAUgc&%2310;6bfRGTX2pe6Z/I0Vc0gvgzBdMEotIhdMcl0acskATDxORmWUZBkmf2OFLKMxcp7MqoxyZBYZNY0h&%2310;L4sof2PFXAxOVmZMKT11C9RmLCvp4ENu8EW7rjSIU5tB10kyG6M0/jEzMwGmSQjH0jBqCs1frsxG&%2310;ZvICZM9MYmjSSSUv3DLbDEDiSL+NzqixL3XP5G+smEN6GYTpglFqEblgkuvSkEsGYOJxMiqjJMsw&%2310;+RsrZBmNkfNkVmWUI7PIqGkMeVlE+Rsr5mJwsjJjSumpW6A2Y1lJBx9ygy/adaVBnNoMuk6S2Ril&%2310;8Y+ZmQkwTUI4loZRU2j+cmU2MpMXIHtmEkOTTip54ZbZZgASR/ptdEaNfal75v8AiYOQdpO0dBEA&%2310;AAAASUVORK5CYII=&%2310;' id='image1' style='opacity:0.5' /%3E%3C/g%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+      }
+      .highlight .cellinside {
+        filter: opacity(25%);
+      }
+      .bingo .cellinside {
+        filter: opacity(25%);
+        /*  filter: blur(5px);
+                filter: brightness(0.4);
+                filter: contrast(200%);
+                filter: drop-shadow(16px 16px 20px blue);
+                filter: grayscale(50%);
+                filter: hue-rotate(90deg);
+                filter: invert(75%);
+                filter: opacity(25%);
+                filter: saturate(30%);
+                filter: sepia(60%);*/
+      }
+
+      .pyro > .before,
+      .pyro > .after {
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        box-shadow: 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff,
+          0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff,
+          0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff,
+          0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff,
+          0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff,
+          0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff,
+          0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff,
+          0 0 #fff, 0 0 #fff, 0 0 #fff;
+        -moz-animation: 1s bang ease-out infinite backwards,
+          1s gravity ease-in infinite backwards,
+          5s position linear infinite backwards;
+        -webkit-animation: 1s bang ease-out infinite backwards,
+          1s gravity ease-in infinite backwards,
+          5s position linear infinite backwards;
+        -o-animation: 1s bang ease-out infinite backwards,
+          1s gravity ease-in infinite backwards,
+          5s position linear infinite backwards;
+        -ms-animation: 1s bang ease-out infinite backwards,
+          1s gravity ease-in infinite backwards,
+          5s position linear infinite backwards;
+        animation: 1s bang ease-out infinite backwards,
+          1s gravity ease-in infinite backwards,
+          5s position linear infinite backwards;
+      }
+
+      .pyro > .after {
+        -moz-animation-delay: 1.25s, 1.25s, 1.25s;
+        -webkit-animation-delay: 1.25s, 1.25s, 1.25s;
+        -o-animation-delay: 1.25s, 1.25s, 1.25s;
+        -ms-animation-delay: 1.25s, 1.25s, 1.25s;
+        animation-delay: 1.25s, 1.25s, 1.25s;
+        -moz-animation-duration: 1.25s, 1.25s, 6.25s;
+        -webkit-animation-duration: 1.25s, 1.25s, 6.25s;
+        -o-animation-duration: 1.25s, 1.25s, 6.25s;
+        -ms-animation-duration: 1.25s, 1.25s, 6.25s;
+        animation-duration: 1.25s, 1.25s, 6.25s;
+      }
+
+      @-webkit-keyframes bang {
+        to {
+          box-shadow: 79px -403.6666666667px #ff0011,
+            -65px -285.6666666667px #00bbff, -104px -173.6666666667px #33ff00,
+            -90px -153.6666666667px #003cff, 114px -247.6666666667px #ff5900,
+            -185px 20.3333333333px #99ff00, 50px -106.6666666667px #44ff00,
+            -233px -155.6666666667px #00ff40, 12px -274.6666666667px #00ff55,
+            -11px -348.6666666667px #ff4400, -89px -123.6666666667px #00ff73,
+            -114px -133.6666666667px #ff0077, -149px -249.6666666667px #ff001e,
+            -62px 53.3333333333px #5100ff, 37px -191.6666666667px #ff0080,
+            -201px -69.6666666667px #ff0011, -212px -365.6666666667px #00ffb7,
+            27px -238.6666666667px #ff5500, -171px 19.3333333333px #5e00ff,
+            -13px -296.6666666667px #ff0900, -27px -273.6666666667px #ddff00,
+            -223px -93.6666666667px #00ff6a, 26px -389.6666666667px #1500ff,
+            100px -17.6666666667px #b700ff, -115px -14.6666666667px #aa00ff,
+            -98px -240.6666666667px #00ff59, -226px -231.6666666667px #1aff00,
+            245px -32.6666666667px #00e1ff, 199px -151.6666666667px #d500ff,
+            -152px -64.6666666667px #ff0044, -74px -340.6666666667px #0040ff,
+            105px -271.6666666667px #00ffaa, 174px 79.3333333333px #33ff00,
+            241px 40.3333333333px #ff2200, 193px -270.6666666667px #ff0084,
+            -133px -329.6666666667px #ff007b, -233px -321.6666666667px #00ff6a,
+            94px -354.6666666667px #c400ff, -205px -380.6666666667px #ff6a00,
+            40px -71.6666666667px #0026ff, -2px -299.6666666667px #00ff8c,
+            -115px 23.3333333333px #00ffb7, -113px -277.6666666667px #ff0084,
+            -50px -111.6666666667px #6aff00, 220px -286.6666666667px #f200ff,
+            165px -279.6666666667px #00b3ff, 113px -58.6666666667px #ccff00,
+            -107px -12.6666666667px #00ffa2, -64px 25.3333333333px #ffbb00,
+            36px -125.6666666667px #d9ff00, 200px -301.6666666667px #ff00d5;
+        }
+      }
+      @-moz-keyframes bang {
+        to {
+          box-shadow: 79px -403.6666666667px #ff0011,
+            -65px -285.6666666667px #00bbff, -104px -173.6666666667px #33ff00,
+            -90px -153.6666666667px #003cff, 114px -247.6666666667px #ff5900,
+            -185px 20.3333333333px #99ff00, 50px -106.6666666667px #44ff00,
+            -233px -155.6666666667px #00ff40, 12px -274.6666666667px #00ff55,
+            -11px -348.6666666667px #ff4400, -89px -123.6666666667px #00ff73,
+            -114px -133.6666666667px #ff0077, -149px -249.6666666667px #ff001e,
+            -62px 53.3333333333px #5100ff, 37px -191.6666666667px #ff0080,
+            -201px -69.6666666667px #ff0011, -212px -365.6666666667px #00ffb7,
+            27px -238.6666666667px #ff5500, -171px 19.3333333333px #5e00ff,
+            -13px -296.6666666667px #ff0900, -27px -273.6666666667px #ddff00,
+            -223px -93.6666666667px #00ff6a, 26px -389.6666666667px #1500ff,
+            100px -17.6666666667px #b700ff, -115px -14.6666666667px #aa00ff,
+            -98px -240.6666666667px #00ff59, -226px -231.6666666667px #1aff00,
+            245px -32.6666666667px #00e1ff, 199px -151.6666666667px #d500ff,
+            -152px -64.6666666667px #ff0044, -74px -340.6666666667px #0040ff,
+            105px -271.6666666667px #00ffaa, 174px 79.3333333333px #33ff00,
+            241px 40.3333333333px #ff2200, 193px -270.6666666667px #ff0084,
+            -133px -329.6666666667px #ff007b, -233px -321.6666666667px #00ff6a,
+            94px -354.6666666667px #c400ff, -205px -380.6666666667px #ff6a00,
+            40px -71.6666666667px #0026ff, -2px -299.6666666667px #00ff8c,
+            -115px 23.3333333333px #00ffb7, -113px -277.6666666667px #ff0084,
+            -50px -111.6666666667px #6aff00, 220px -286.6666666667px #f200ff,
+            165px -279.6666666667px #00b3ff, 113px -58.6666666667px #ccff00,
+            -107px -12.6666666667px #00ffa2, -64px 25.3333333333px #ffbb00,
+            36px -125.6666666667px #d9ff00, 200px -301.6666666667px #ff00d5;
+        }
+      }
+      @-o-keyframes bang {
+        to {
+          box-shadow: 79px -403.6666666667px #ff0011,
+            -65px -285.6666666667px #00bbff, -104px -173.6666666667px #33ff00,
+            -90px -153.6666666667px #003cff, 114px -247.6666666667px #ff5900,
+            -185px 20.3333333333px #99ff00, 50px -106.6666666667px #44ff00,
+            -233px -155.6666666667px #00ff40, 12px -274.6666666667px #00ff55,
+            -11px -348.6666666667px #ff4400, -89px -123.6666666667px #00ff73,
+            -114px -133.6666666667px #ff0077, -149px -249.6666666667px #ff001e,
+            -62px 53.3333333333px #5100ff, 37px -191.6666666667px #ff0080,
+            -201px -69.6666666667px #ff0011, -212px -365.6666666667px #00ffb7,
+            27px -238.6666666667px #ff5500, -171px 19.3333333333px #5e00ff,
+            -13px -296.6666666667px #ff0900, -27px -273.6666666667px #ddff00,
+            -223px -93.6666666667px #00ff6a, 26px -389.6666666667px #1500ff,
+            100px -17.6666666667px #b700ff, -115px -14.6666666667px #aa00ff,
+            -98px -240.6666666667px #00ff59, -226px -231.6666666667px #1aff00,
+            245px -32.6666666667px #00e1ff, 199px -151.6666666667px #d500ff,
+            -152px -64.6666666667px #ff0044, -74px -340.6666666667px #0040ff,
+            105px -271.6666666667px #00ffaa, 174px 79.3333333333px #33ff00,
+            241px 40.3333333333px #ff2200, 193px -270.6666666667px #ff0084,
+            -133px -329.6666666667px #ff007b, -233px -321.6666666667px #00ff6a,
+            94px -354.6666666667px #c400ff, -205px -380.6666666667px #ff6a00,
+            40px -71.6666666667px #0026ff, -2px -299.6666666667px #00ff8c,
+            -115px 23.3333333333px #00ffb7, -113px -277.6666666667px #ff0084,
+            -50px -111.6666666667px #6aff00, 220px -286.6666666667px #f200ff,
+            165px -279.6666666667px #00b3ff, 113px -58.6666666667px #ccff00,
+            -107px -12.6666666667px #00ffa2, -64px 25.3333333333px #ffbb00,
+            36px -125.6666666667px #d9ff00, 200px -301.6666666667px #ff00d5;
+        }
+      }
+      @-ms-keyframes bang {
+        to {
+          box-shadow: 79px -403.6666666667px #ff0011,
+            -65px -285.6666666667px #00bbff, -104px -173.6666666667px #33ff00,
+            -90px -153.6666666667px #003cff, 114px -247.6666666667px #ff5900,
+            -185px 20.3333333333px #99ff00, 50px -106.6666666667px #44ff00,
+            -233px -155.6666666667px #00ff40, 12px -274.6666666667px #00ff55,
+            -11px -348.6666666667px #ff4400, -89px -123.6666666667px #00ff73,
+            -114px -133.6666666667px #ff0077, -149px -249.6666666667px #ff001e,
+            -62px 53.3333333333px #5100ff, 37px -191.6666666667px #ff0080,
+            -201px -69.6666666667px #ff0011, -212px -365.6666666667px #00ffb7,
+            27px -238.6666666667px #ff5500, -171px 19.3333333333px #5e00ff,
+            -13px -296.6666666667px #ff0900, -27px -273.6666666667px #ddff00,
+            -223px -93.6666666667px #00ff6a, 26px -389.6666666667px #1500ff,
+            100px -17.6666666667px #b700ff, -115px -14.6666666667px #aa00ff,
+            -98px -240.6666666667px #00ff59, -226px -231.6666666667px #1aff00,
+            245px -32.6666666667px #00e1ff, 199px -151.6666666667px #d500ff,
+            -152px -64.6666666667px #ff0044, -74px -340.6666666667px #0040ff,
+            105px -271.6666666667px #00ffaa, 174px 79.3333333333px #33ff00,
+            241px 40.3333333333px #ff2200, 193px -270.6666666667px #ff0084,
+            -133px -329.6666666667px #ff007b, -233px -321.6666666667px #00ff6a,
+            94px -354.6666666667px #c400ff, -205px -380.6666666667px #ff6a00,
+            40px -71.6666666667px #0026ff, -2px -299.6666666667px #00ff8c,
+            -115px 23.3333333333px #00ffb7, -113px -277.6666666667px #ff0084,
+            -50px -111.6666666667px #6aff00, 220px -286.6666666667px #f200ff,
+            165px -279.6666666667px #00b3ff, 113px -58.6666666667px #ccff00,
+            -107px -12.6666666667px #00ffa2, -64px 25.3333333333px #ffbb00,
+            36px -125.6666666667px #d9ff00, 200px -301.6666666667px #ff00d5;
+        }
+      }
+      @keyframes bang {
+        to {
+          box-shadow: 79px -403.6666666667px #ff0011,
+            -65px -285.6666666667px #00bbff, -104px -173.6666666667px #33ff00,
+            -90px -153.6666666667px #003cff, 114px -247.6666666667px #ff5900,
+            -185px 20.3333333333px #99ff00, 50px -106.6666666667px #44ff00,
+            -233px -155.6666666667px #00ff40, 12px -274.6666666667px #00ff55,
+            -11px -348.6666666667px #ff4400, -89px -123.6666666667px #00ff73,
+            -114px -133.6666666667px #ff0077, -149px -249.6666666667px #ff001e,
+            -62px 53.3333333333px #5100ff, 37px -191.6666666667px #ff0080,
+            -201px -69.6666666667px #ff0011, -212px -365.6666666667px #00ffb7,
+            27px -238.6666666667px #ff5500, -171px 19.3333333333px #5e00ff,
+            -13px -296.6666666667px #ff0900, -27px -273.6666666667px #ddff00,
+            -223px -93.6666666667px #00ff6a, 26px -389.6666666667px #1500ff,
+            100px -17.6666666667px #b700ff, -115px -14.6666666667px #aa00ff,
+            -98px -240.6666666667px #00ff59, -226px -231.6666666667px #1aff00,
+            245px -32.6666666667px #00e1ff, 199px -151.6666666667px #d500ff,
+            -152px -64.6666666667px #ff0044, -74px -340.6666666667px #0040ff,
+            105px -271.6666666667px #00ffaa, 174px 79.3333333333px #33ff00,
+            241px 40.3333333333px #ff2200, 193px -270.6666666667px #ff0084,
+            -133px -329.6666666667px #ff007b, -233px -321.6666666667px #00ff6a,
+            94px -354.6666666667px #c400ff, -205px -380.6666666667px #ff6a00,
+            40px -71.6666666667px #0026ff, -2px -299.6666666667px #00ff8c,
+            -115px 23.3333333333px #00ffb7, -113px -277.6666666667px #ff0084,
+            -50px -111.6666666667px #6aff00, 220px -286.6666666667px #f200ff,
+            165px -279.6666666667px #00b3ff, 113px -58.6666666667px #ccff00,
+            -107px -12.6666666667px #00ffa2, -64px 25.3333333333px #ffbb00,
+            36px -125.6666666667px #d9ff00, 200px -301.6666666667px #ff00d5;
+        }
+      }
+      @-webkit-keyframes gravity {
+        to {
+          transform: translateY(200px);
+          -moz-transform: translateY(200px);
+          -webkit-transform: translateY(200px);
+          -o-transform: translateY(200px);
+          -ms-transform: translateY(200px);
+          opacity: 0;
+        }
+      }
+      @-moz-keyframes gravity {
+        to {
+          transform: translateY(200px);
+          -moz-transform: translateY(200px);
+          -webkit-transform: translateY(200px);
+          -o-transform: translateY(200px);
+          -ms-transform: translateY(200px);
+          opacity: 0;
+        }
+      }
+      @-o-keyframes gravity {
+        to {
+          transform: translateY(200px);
+          -moz-transform: translateY(200px);
+          -webkit-transform: translateY(200px);
+          -o-transform: translateY(200px);
+          -ms-transform: translateY(200px);
+          opacity: 0;
+        }
+      }
+      @-ms-keyframes gravity {
+        to {
+          transform: translateY(200px);
+          -moz-transform: translateY(200px);
+          -webkit-transform: translateY(200px);
+          -o-transform: translateY(200px);
+          -ms-transform: translateY(200px);
+          opacity: 0;
+        }
+      }
+      @keyframes gravity {
+        to {
+          transform: translateY(200px);
+          -moz-transform: translateY(200px);
+          -webkit-transform: translateY(200px);
+          -o-transform: translateY(200px);
+          -ms-transform: translateY(200px);
+          opacity: 0;
+        }
+      }
+      @-webkit-keyframes position {
+        0%,
+        19.9% {
+          margin-top: 10%;
+          margin-left: 40%;
+        }
+        20%,
+        39.9% {
+          margin-top: 40%;
+          margin-left: 30%;
+        }
+        40%,
+        59.9% {
+          margin-top: 20%;
+          margin-left: 70%;
+        }
+        60%,
+        79.9% {
+          margin-top: 30%;
+          margin-left: 20%;
+        }
+        80%,
+        99.9% {
+          margin-top: 30%;
+          margin-left: 80%;
+        }
+      }
+      @-moz-keyframes position {
+        0%,
+        19.9% {
+          margin-top: 10%;
+          margin-left: 40%;
+        }
+        20%,
+        39.9% {
+          margin-top: 40%;
+          margin-left: 30%;
+        }
+        40%,
+        59.9% {
+          margin-top: 20%;
+          margin-left: 70%;
+        }
+        60%,
+        79.9% {
+          margin-top: 30%;
+          margin-left: 20%;
+        }
+        80%,
+        99.9% {
+          margin-top: 30%;
+          margin-left: 80%;
+        }
+      }
+      @-o-keyframes position {
+        0%,
+        19.9% {
+          margin-top: 10%;
+          margin-left: 40%;
+        }
+        20%,
+        39.9% {
+          margin-top: 40%;
+          margin-left: 30%;
+        }
+        40%,
+        59.9% {
+          margin-top: 20%;
+          margin-left: 70%;
+        }
+        60%,
+        79.9% {
+          margin-top: 30%;
+          margin-left: 20%;
+        }
+        80%,
+        99.9% {
+          margin-top: 30%;
+          margin-left: 80%;
+        }
+      }
+      @-ms-keyframes position {
+        0%,
+        19.9% {
+          margin-top: 10%;
+          margin-left: 40%;
+        }
+        20%,
+        39.9% {
+          margin-top: 40%;
+          margin-left: 30%;
+        }
+        40%,
+        59.9% {
+          margin-top: 20%;
+          margin-left: 70%;
+        }
+        60%,
+        79.9% {
+          margin-top: 30%;
+          margin-left: 20%;
+        }
+        80%,
+        99.9% {
+          margin-top: 30%;
+          margin-left: 80%;
+        }
+      }
+      @keyframes position {
+        0%,
+        19.9% {
+          margin-top: 10%;
+          margin-left: 40%;
+        }
+        20%,
+        39.9% {
+          margin-top: 40%;
+          margin-left: 30%;
+        }
+        40%,
+        59.9% {
+          margin-top: 20%;
+          margin-left: 70%;
+        }
+        60%,
+        79.9% {
+          margin-top: 30%;
+          margin-left: 20%;
+        }
+        80%,
+        99.9% {
+          margin-top: 30%;
+          margin-left: 80%;
+        }
+      }
+    </style>
+  </head>
+  <body onload="loadWords()">
+    <h1 class="unselectable">Cru3l Bingo Card</h1>
+
+    <div class="pyro" id="overlay">
+      <div class="before"></div>
+      <div class="toast" id="toast">BINGO!! Scuffed streamer detected!</div>
+      <div class="after"></div>
+    </div>
+    <ul>
+      <li
+        class="cell unselectable"
+        id="cell0"
+        data-cell="0"
+        onclick="onclicked(this.dataset.cell)"
+      >
+        <div class="cellinside"></div>
+      </li>
+      <li
+        class="cell unselectable"
+        id="cell1"
+        data-cell="1"
+        onclick="onclicked(this.dataset.cell)"
+      >
+        <div class="cellinside"></div>
+      </li>
+      <li
+        class="cell unselectable"
+        id="cell2"
+        data-cell="2"
+        onclick="onclicked(this.dataset.cell)"
+      >
+        <div class="cellinside"></div>
+      </li>
+      <li
+        class="cell unselectable"
+        id="cell3"
+        data-cell="3"
+        onclick="onclicked(this.dataset.cell)"
+      >
+        <div class="cellinside"></div>
+      </li>
+      <li
+        class="cell unselectable"
+        id="cell4"
+        data-cell="4"
+        onclick="onclicked(this.dataset.cell)"
+      >
+        <div class="cellinside"></div>
+      </li>
+      <li
+        class="cell unselectable"
+        id="cell5"
+        data-cell="5"
+        onclick="onclicked(this.dataset.cell)"
+      >
+        <div class="cellinside"></div>
+      </li>
+      <li
+        class="cell unselectable"
+        id="cell6"
+        data-cell="6"
+        onclick="onclicked(this.dataset.cell)"
+      >
+        <div class="cellinside"></div>
+      </li>
+      <li
+        class="cell unselectable"
+        id="cell7"
+        data-cell="7"
+        onclick="onclicked(this.dataset.cell)"
+      >
+        <div class="cellinside"></div>
+      </li>
+      <li
+        class="cell unselectable"
+        id="cell8"
+        data-cell="8"
+        onclick="onclicked(this.dataset.cell)"
+      >
+        <div class="cellinside"></div>
+      </li>
+    </ul>
+
+    <script>
+      let words = [
+        "forgot to eat before",
+        "light died",
+        "eff youtube",
+        "blood sausages are evil",
+        "mic bump",
+        "monitor blink",
+        "Chaewon is cute",
+        "7TV not working",
+        "Chaeyeon hate ◕‿↼)",
+      ];
+
+      const masks = [
+        [0, 4, 8],
+        [2, 4, 6],
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+      ];
+
+      let bingocells = [];
+      let isOverlayOn = false;
+
+      const onclicked = (id) => {
+        flip("cell" + id);
+
+        const highlighted = [
+          ...document.getElementsByClassName("cell highlight"),
+        ].map((el) => parseInt(el.dataset.cell));
+
+        let newbingocells = [];
+        masks.forEach((m) => {
+          if (m.every((num) => highlighted.includes(num))) {
+            newbingocells = newbingocells.concat(m);
+          }
+        });
+        newbingocells = [...new Set(newbingocells)];
+        newbingocells.sort();
+
+        const all = [...document.getElementsByClassName("cell")];
+        all.forEach((el) => {
+          if (newbingocells.includes(parseInt(el.dataset.cell))) {
+            el.classList.add("bingo");
+          } else {
+            el.classList.remove("bingo");
+          }
+        });
+
+        if (bingocells.length < newbingocells.length && isOverlayOn != true) {
+          if (newbingocells.length == 9) {
+            document.getElementById("toast").innerHTML =
+              "BINGO!! The streamer is super-scuffed!";
+            overlayOn();
+          } else {
+            overlayOn();
+          }
+        }
+        bingocells = newbingocells;
+      };
+
+      const flip = (id) => {
+        const el = document.getElementById(id);
+        if (el.classList.contains("highlight")) {
+          el.classList.remove("highlight");
+        } else {
+          el.classList.add("highlight");
+        }
+      };
+
+      const shuffle = (array) => {
+        let currentIndex = array.length,
+          randomIndex;
+        while (currentIndex > 0) {
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex--;
+          [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex],
+            array[currentIndex],
+          ];
+        }
+        return array;
+      };
+
+      const loadWords = () => {
+        words = shuffle(words);
+        const all = [...document.getElementsByClassName("cell")];
+        all.forEach(
+          (el) => (el.children[0].innerHTML = words[parseInt(el.dataset.cell)])
+        );
+      };
+
+      let intv;
+      const overlayOn = () => {
+        isOverlayOn = true;
+        document.getElementById("overlay").style.display = "block";
+        intv = setInterval(overlayOff, 2000);
+      };
+
+      const overlayOff = () => {
+        document.getElementById("overlay").style.display = "none";
+        isOverlayOn = false;
+        clearTimeout(intv);
+      };
+    </script>
+  </body>
+</html>
